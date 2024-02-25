@@ -22,7 +22,7 @@ void save(float num)
 {
     FILE* file2;
     fopen_s(&file2, "output.txt", "w");
-    fprintf(file2, "%f", num);
+        fprintf(file2, "%f", num);
     fclose(file2);
 }
 
@@ -32,13 +32,16 @@ void calculate(list* n, list* s)
     list* x, * y;
     x = s;
     y = n;
-    while (x->next != NULL)
+    while ((x->prev != y) && (x != y))
     {
-        sum += (x->elem) * (y->elem);
+        sum = sum + 2 * (x->elem) * (y->elem);
         x = x->next;
         y = y->prev;
     };
-    sum += (x->elem) * (y->elem);
+    if (x == y)
+    {
+        sum = sum + (x->elem) * (y->elem);
+    }
     save(sum);
     clean(s);
 }
@@ -87,11 +90,10 @@ void input()
     n->next = NULL;
     calculate(n, s);
     fclose(file1);
-
 }
 
 
 int main()
 {
     input();
-}
+};
