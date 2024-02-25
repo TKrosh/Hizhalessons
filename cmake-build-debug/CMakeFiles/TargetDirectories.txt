@@ -1,0 +1,3 @@
+/Users/nikul22/CLionProjects/Hizhalessons1/cmake-build-debug/CMakeFiles/Hizhalessons1.dir
+/Users/nikul22/CLionProjects/Hizhalessons1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/nikul22/CLionProjects/Hizhalessons1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

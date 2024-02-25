@@ -1,96 +1,106 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct list
-{
-    list* next, * prev;
-    float elem;
+struct node{
+    node *next = NULL, *prev = NULL;
+    float element = 0;
 };
 
-void clean(list* s)
-{
-    list* k = s->next;
-    for (; k; k = k->next)
-    {
-        delete s;
-        s = k;
-    }
-    delete s;
+struct list{
+    node* head = NULL;
+    node* tail = NULL;
+};
+
+
+
+void nodecreate(node* p, float num){
+    node *n = new node;
+    n -> element = num;
+    n -> prev = p;
+    p -> next = n;
 }
 
-void save(float num)
-{
-    FILE* file2 = fopen("output.txt", "w");
-    fprintf(file2, "%f", num);
-    fclose(file2);
-}
 
-void calculate(list* n, list* s)
-{
-    float sum = 0;
-    list* x, * y;
-    x = s;
-    y = n;
-    while ((x != y) && (x -> prev != y))
-    {
-        sum += 2 * (x->elem) * (y->elem);
-        x = x->next;
-        y = y->prev;
-    };
-    if (x == y)
-        sum += (x->elem) * (y->elem);
-    save(sum);
-    clean(s);
-}
+void input(list* h){
 
-void check(list* n)
-{
-    while (n->next != NULL)
-    {
-        printf("%f", n->elem);
-        printf(" ");
-        n = n->next;
-    };
-    printf("%f", n->elem);
-}
-
-void input()
-{
-    FILE* file1 =fopen("input.txt", "r");
+    float element;
+    node* p;
+    FILE* input_file = fopen("input.txt", "r");
     char c = ' ';
 
+    if (!input_file){
+        printf("Ошибка открытия файла");
+        exit(1);
+    }
+    h -> head = new node;
 
-    if (!file1)
+    p = h -> head;
+    fscanf(input_file, "%f", &p -> element);
+
+    while(c != EOF)
     {
-        printf("ERROR!!! FILE DOES NOT FOUNDED");
+        fscanf(input_file, "%f", &element);
+        nodecreate(p, element);
+        p = p -> next;
+        c = fgetc(input_file);
+    }
+    h -> tail = p;
+    fclose(input_file);
+
+}
+
+float sequence(node *h, node *p)
+{
+    float sum = 0;
+    node *x = h, *y = p;
+    while((x != y) && (x -> prev != y))
+    {
+        sum += 2 * (x -> element) * (y -> element);
+        x = x -> next;
+        y = y -> prev;
+
+    }
+    if (x == y)
+        sum += (x -> element) * (y -> element);
+    return sum;
+}
+
+void output(float sum)
+{
+    FILE* output_file = fopen("out.txt", "w");
+
+    if(!output_file)
+    {
+        printf("Ошибка открытия файла");
         exit(1);
     }
 
-    list* n, * t, * s;
-    s = new list;
-    n = s;
-    s->prev = NULL;
-    fscanf(file1, "%f", &n->elem);
-    printf("%c", c);
-    printf("%c", n->elem);
+    fprintf(output_file, "%.3f", sum);
 
-    while (c != EOF)
-    {
-        t = new list;
-        t->prev = n;
-        n->next = t;
-        n = n->next;
-        fscanf(file1, "%f", &t->elem);
-        c = fgetc(file1);
-    };
-    n->next = NULL;
-    calculate(n, s);
-    fclose(file1);
+    fclose(output_file);
 
 }
 
-
-int main()
+void Delete(node *l)
 {
-    input();
+    node *k = l -> next;
+    for(; k; k = k-> next){
+        delete l;
+        l = k;
+    }
+    delete l;
+
+}
+
+int main(){
+    list *n;
+    node *p, *h;
+    float a;
+    input(n);
+    h = n -> head;
+    p = n -> tail;
+    a = sequence(h, p);
+    output(a);
+    Delete(h);
+    return 0;
 }
