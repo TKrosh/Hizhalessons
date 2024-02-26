@@ -21,44 +21,44 @@ void clean(list* s)
 void save(float num)
 {
     FILE* file2 = fopen("output.txt", "w");
-    fprintf(file2, "%f", num);
+    fprintf(file2, "%.3f", num);
     fclose(file2);
 }
 
-void calculate(list* n, list* s)
+float calculate(list* s)
 {
     float sum = 0;
     list* x, * y;
     x = s;
-    y = n;
-    while ((x != y) && (x -> prev != y))
+    y = s -> prev;
+    while ((x != y) && (y -> next != x))
     {
+
         sum += 2 * (x->elem) * (y->elem);
         x = x->next;
         y = y->prev;
     };
     if (x == y)
         sum += (x->elem) * (y->elem);
-    save(sum);
-    clean(s);
+
+    return sum;
 }
 
-void check(list* n)
-{
-    while (n->next != NULL)
-    {
-        printf("%f", n->elem);
-        printf(" ");
-        n = n->next;
-    };
-    printf("%f", n->elem);
-}
+//void check(list* n)
+//{
+// while (n->next != NULL)
+// {
+// printf("%f\n", n->elem);
+// n = n->next;
+// }
+// printf("%f", n->elem);
+//}
 
-void input()
+void input(list* s)
 {
-    FILE* file1 =fopen("input.txt", "r");
+    FILE* file1 = fopen("input.txt", "r");
+    list* n, * t;
     char c = ' ';
-
 
     if (!file1)
     {
@@ -66,13 +66,8 @@ void input()
         exit(1);
     }
 
-    list* n, * t, * s;
-    s = new list;
     n = s;
-    s->prev = NULL;
     fscanf(file1, "%f", &n->elem);
-    printf("%c", c);
-    printf("%c", n->elem);
 
     while (c != EOF)
     {
@@ -82,15 +77,21 @@ void input()
         n = n->next;
         fscanf(file1, "%f", &t->elem);
         c = fgetc(file1);
-    };
+    }
+
     n->next = NULL;
-    calculate(n, s);
+    s -> prev = n;
     fclose(file1);
 
 }
 
-
-int main()
-{
-    input();
+int main(void){
+    list* s = new list;
+    float sum;
+    input(s);
+// check(s);
+    sum = calculate(s);
+    save(sum);
+    clean(s);
+    return 0;
 }
