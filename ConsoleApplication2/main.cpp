@@ -17,11 +17,22 @@ void clean(list* s)
     }
     delete s;
 }
+/*
+void check(list* n)
+{
+    while (n->next != NULL)
+    {
+        printf("%f", n->elem);
+        printf(" ");
+        n = n->next;
+    };
+    printf("%f", n->elem);
+}*/
 
 void save(float num)
 {
     FILE* file2 = fopen("output.txt", "w");
-    fprintf(file2, "%.3f", num);
+    fprintf(file2, "%f", num);
     fclose(file2);
 }
 
@@ -30,34 +41,24 @@ float calculate(list* s)
     float sum = 0;
     list* x, * y;
     x = s;
-    y = s -> prev;
-    while ((x != y) && (y -> next != x))
+    y = s->prev;
+    while ((y->next != x) && (x != y))
     {
-
-        sum += 2 * (x->elem) * (y->elem);
+        sum = sum + 2 * (x->elem) * (y->elem);
         x = x->next;
         y = y->prev;
     };
     if (x == y)
-        sum += (x->elem) * (y->elem);
-
+    {
+        sum = sum + (x->elem) * (y->elem);
+    }
     return sum;
 }
 
-//void check(list* n)
-//{
-// while (n->next != NULL)
-// {
-// printf("%f\n", n->elem);
-// n = n->next;
-// }
-// printf("%f", n->elem);
-//}
-
-void input(list* s)
+void input(char *fname, list* s)
 {
-    FILE* file1 = fopen("input.txt", "r");
-    list* n, * t;
+    FILE* file1 = fopen(fname, "r");;
+    list* t, *n;
     char c = ' ';
 
     if (!file1)
@@ -65,6 +66,7 @@ void input(list* s)
         printf("ERROR!!! FILE DOES NOT FOUNDED");
         exit(1);
     }
+
 
     n = s;
     fscanf(file1, "%f", &n->elem);
@@ -77,21 +79,24 @@ void input(list* s)
         n = n->next;
         fscanf(file1, "%f", &t->elem);
         c = fgetc(file1);
-    }
-
+    };
+    s->prev = n;
     n->next = NULL;
-    s -> prev = n;
     fclose(file1);
-
 }
 
-int main(void){
-    list* s = new list;
+
+int main()
+{
+    list* s;
     float sum;
-    input(s);
-// check(s);
+    s = new list;
+
+    char fname[] = "input.txt";
+
+    input(fname, s);
     sum = calculate(s);
     save(sum);
     clean(s);
     return 0;
-}
+};
