@@ -17,35 +17,7 @@ void clean(list* s)
     }
     delete s;
 }
-
-void save(float num)
-{
-    FILE* file2;
-    fopen_s(&file2, "output.txt", "w");
-        fprintf(file2, "%f", num);
-    fclose(file2);
-}
-
-void calculate(list* n, list* s)
-{
-    float sum = 0;
-    list* x, * y;
-    x = s;
-    y = n;
-    while ((x->prev != y) && (x != y))
-    {
-        sum = sum + 2 * (x->elem) * (y->elem);
-        x = x->next;
-        y = y->prev;
-    };
-    if (x == y)
-    {
-        sum = sum + (x->elem) * (y->elem);
-    }
-    save(sum);
-    clean(s);
-}
-
+/*
 void check(list* n)
 {
     while (n->next != NULL)
@@ -56,27 +28,51 @@ void check(list* n)
     };
     printf("%f", n->elem);
 }
+*/
 
-void input()
+void save(float num)
+{
+    FILE* file2;
+    fopen_s(&file2, "output.txt", "w");
+        fprintf(file2, "%f", num);
+    fclose(file2);
+}
+
+float calculate(list* s)
+{
+    float sum = 0;
+    list* x, * y;
+    x = s;
+    y = s->prev;
+    while ((y->next != x) && (x != y))
+    {
+        sum = sum + 2 * (x->elem) * (y->elem);
+        x = x->next;
+        y = y->prev;
+    };
+    if (x == y)
+    {
+        sum = sum + (x->elem) * (y->elem);
+    }
+    return sum;
+}
+
+void input(char *fname, list* s)
 {
     FILE* file1;
-    fopen_s(&file1, "input.txt", "r");
+    list* t, *n;
     char c = ' ';
 
-
+    fopen_s(&file1, fname, "r");
     if (!file1)
     {
         printf("ERROR!!! FILE DOES NOT FOUNDED");
         exit(1);
     }
-
-    list* n, * t, * s;
-    s = new list;
+    
+    
     n = s;
-    s->prev = NULL;
     fscanf_s(file1, "%f", &n->elem);
-    printf("%c", c);
-    printf("%c", n->elem);
 
     while (c != EOF)
     {
@@ -87,13 +83,23 @@ void input()
         fscanf_s(file1, "%f", &t->elem);
         c = fgetc(file1);
     };
+    s->prev = n;
     n->next = NULL;
-    calculate(n, s);
     fclose(file1);
 }
 
 
 int main()
 {
-    input();
+    list* s;
+    float sum;
+    s = new list;
+
+    char fname[10] = "input.txt";
+
+    input(fname, s);
+    sum = calculate(s);
+    save(sum);
+    clean(s);
+    return 0;
 };
