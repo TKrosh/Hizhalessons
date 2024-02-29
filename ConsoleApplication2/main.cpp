@@ -17,7 +17,7 @@ void clean(list* s)
     }
     delete s;
 }
-/*
+
 void check(list* n)
 {
     while (n->next != NULL)
@@ -28,7 +28,6 @@ void check(list* n)
     };
     printf("%f", n->elem);
 }
-*/
 
 void save(float num)
 {
