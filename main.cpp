@@ -7,7 +7,25 @@ struct list{
     list* next;
 };
 
-int input(list** head, char* file_name, float* a, float* b){
+void show(queue queue1){
+    queue queue2;
+    float c;
+    create_queue(&queue2);
+    while(!is_empty(queue1)){
+        c = pop(&queue1);
+        printf("%f ", c);
+        push(&queue2, c);
+    }
+    while(!is_empty(queue2)){
+        c = pop(&queue2);
+        push(&queue1, c);
+    }
+}
+
+int calculate(char* file_name, list** output_list){
+    queue element_in_range, element_out_range;
+    float a, b;
+
     FILE* input_file = fopen(file_name, "r");
     list* position;
     char c = ' ';
@@ -15,12 +33,12 @@ int input(list** head, char* file_name, float* a, float* b){
     if (!input_file)
         return 1;
 
-    fscanf(input_file, "%f", &*a);
-    fscanf(input_file, "%f", &*b);
+    fscanf(input_file, "%f", &a);
+    fscanf(input_file, "%f", &b);
 
 
-    *head = new list;
-    position = *head;
+    list *head = new list;
+    position = head;
     fscanf(input_file, "%f", &position -> elem);
     c = fgetc(input_file);
 
@@ -33,34 +51,20 @@ int input(list** head, char* file_name, float* a, float* b){
     position -> next = NULL;
 
 
-    fclose(input_file);
-    return 0;
-}
-
-void pop_and_add_to_list(queue queue, list** position){
-    while (!is_empty(queue)){
-        (*position) -> elem = pop(&queue);
-        (*position) -> next = new list;
-        (*position) = (*position) -> next;
-    }
-}
-
-void calculate(list* input_list, list** output_list, float a, float b){
-    queue element_in_range, element_out_range;
     create_queue(&element_in_range);
     create_queue(&element_out_range);
 
-    list* current = input_list, *position;
+    list* current = head, *cr_position;
     *output_list = new list;
-    position = *output_list;
+    cr_position = *output_list;
 
 
     while(current != NULL){
 
         if (current -> elem < a){
-            position -> elem = current -> elem;
-            position -> next = new list;
-            position = position -> next;
+            cr_position -> elem = current -> elem;
+            cr_position -> next = new list;
+            cr_position = cr_position -> next;
         }
 
         else if( (current -> elem >= a) && (current -> elem <= b))
@@ -72,10 +76,23 @@ void calculate(list* input_list, list** output_list, float a, float b){
         current = current -> next;
     }
 
-    pop_and_add_to_list(element_in_range, &position);
-    pop_and_add_to_list(element_out_range, &position);
-    position = NULL;
+    show(element_in_range);
+    show(element_out_range);
+    while (!is_empty(element_in_range)){
+        cr_position -> elem = pop(&element_in_range);
+        cr_position -> next = new list;
+        cr_position = cr_position -> next;
+    }
+    while (!is_empty(element_out_range)){
+        cr_position-> elem = pop(&element_out_range);
+        cr_position -> next = new list;
+        cr_position = cr_position -> next;
+    }
 
+
+    position = NULL;
+    fclose(input_file);
+    return 0;
 
 }
 
@@ -100,15 +117,12 @@ int main() {
     list* input_list, *output_list;
     char input_file_name[] = "input.txt";
     char output_file_name[] = "output.txt";
-    float a, b;
-    int c, d;
-
-    c = input(&input_list, input_file_name, &a, &b);
-    if (c) {
+    int c;
+    c = calculate(input_file_name, &output_list);
+        if (c) {
         printf("0");
         return 0;
     }
-    calculate(input_list, &output_list, a, b);
     output(output_list, output_file_name);
 
 }

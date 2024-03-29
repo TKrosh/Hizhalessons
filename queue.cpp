@@ -1,4 +1,7 @@
+#include <stdio.h>
+
 #define SIZE 50
+
 
 struct queue{
     int begin, end;
@@ -21,14 +24,10 @@ int is_empty(queue queue){
     return queue.end == queue.begin - 1;
 }
 
-int is_full(queue queue){
-    return queue.begin == queue.end;
-}
-
 
 float pop(queue* queue){
     float element = queue -> nums[queue -> begin];
-    if(is_full(*queue)){
+    if(queue -> begin == queue -> end){
         queue -> begin = 0;
         queue -> end = -1;
     }
@@ -36,6 +35,9 @@ float pop(queue* queue){
         queue -> begin = (queue -> begin + 1) % SIZE;
     return element;
 }
+
+
+
 
 
 
