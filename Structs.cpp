@@ -3,6 +3,7 @@
 
 struct Tree{
     char elem;
+    int level;
     Tree *left, *right;
 };
 
