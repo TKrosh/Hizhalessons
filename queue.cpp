@@ -1,10 +1,9 @@
-#include <stdio.h>
 
 #define SIZE 50
 
 
 struct queue{
-    int begin, end;
+    int begin = 0, end = -1;
     float nums[SIZE];
 };
 
