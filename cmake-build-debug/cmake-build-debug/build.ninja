@@ -55,8 +55,14 @@ build CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/main.cpp.o: CXX_COMPI
   OBJECT_DIR = CMakeFiles/pz_2.dir
   OBJECT_FILE_DIR = CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2
 
-build CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/queue.cpp.o: CXX_COMPILER__pz_2_unscanned_Debug /Users/nikul22/CLionProjects/pz_2/queue.cpp || cmake_object_order_depends_target_pz_2
-  DEP_FILE = CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/queue.cpp.o.d
+build CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/Queue.cpp.o: CXX_COMPILER__pz_2_unscanned_Debug /Users/nikul22/CLionProjects/pz_2/Queue.cpp || cmake_object_order_depends_target_pz_2
+  DEP_FILE = CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/Queue.cpp.o.d
+  FLAGS = -g -std=gnu++17 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/pz_2.dir
+  OBJECT_FILE_DIR = CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2
+
+build CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/Structs.cpp.o: CXX_COMPILER__pz_2_unscanned_Debug /Users/nikul22/CLionProjects/pz_2/Structs.cpp || cmake_object_order_depends_target_pz_2
+  DEP_FILE = CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/Structs.cpp.o.d
   FLAGS = -g -std=gnu++17 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/pz_2.dir
   OBJECT_FILE_DIR = CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2
@@ -69,7 +75,7 @@ build CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/queue.cpp.o: CXX_COMP
 #############################################
 # Link the executable pz_2
 
-build pz_2: CXX_EXECUTABLE_LINKER__pz_2_Debug CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/main.cpp.o CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/queue.cpp.o
+build pz_2: CXX_EXECUTABLE_LINKER__pz_2_Debug CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/main.cpp.o CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/Queue.cpp.o CMakeFiles/pz_2.dir/Users/nikul22/CLionProjects/pz_2/Structs.cpp.o
   FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   OBJECT_DIR = CMakeFiles/pz_2.dir
   POST_BUILD = :

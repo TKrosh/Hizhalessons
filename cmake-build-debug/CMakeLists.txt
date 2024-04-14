@@ -4,4 +4,5 @@ project(pz_2)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(pz_2 ../main.cpp
-        ../queue.cpp)
+        ../Queue.cpp
+        ../Structs.cpp)
