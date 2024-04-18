@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "pz_2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-pz_2-Debug-dc07acc33f5e8c860b27.json",
+					"jsonFile" : "target-pz_2-Debug-873481a2fd88f0232b73.json",
 					"name" : "pz_2",
 					"projectIndex" : 0
 				}
@@ -55,6 +55,6 @@
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 5
+		"minor" : 6
 	}
 }

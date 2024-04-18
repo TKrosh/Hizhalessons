@@ -3,19 +3,19 @@
 
 
 
-int push(queue* queue, Tree* tree){
+int push(tree_queue* queue, Tree* tree){
     queue -> end = (queue -> end + 1) % SIZE;
     queue -> nums[queue -> end] = tree;
     return 1;
 }
 
 
-int is_empty(queue queue){
+int is_empty(tree_queue queue){
     return queue.end == queue.begin - 1;
 }
 
 
-Tree* pop(queue* queue){
+Tree* pop(tree_queue* queue){
     Tree* element = queue -> nums[queue -> begin];
     if(queue -> begin == queue -> end){
         queue -> begin = 0;
@@ -27,8 +27,8 @@ Tree* pop(queue* queue){
 }
 
 
-void show(queue* queue1){
-    queue queue2;
+void show(tree_queue* queue1){
+    tree_queue queue2;
     Tree* c;
     while(!is_empty(*queue1)){
         c = pop(queue1);

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Queue.cpp"
+#include "Tree_queue.cpp"
 
 
 Tree* build_tree(FILE* input_file){
@@ -26,34 +26,43 @@ Tree* build_tree(FILE* input_file){
 
 void BFS(Tree* tree, char* output_file_name){
     FILE* output_file = fopen(output_file_name, "w");
-    queue tree_queue;
+    tree_queue tree_queue;
+    int k = 1, l;
     Tree* current_tree_element;
-    int prev_level;
-    tree -> level = 0;
-    current_tree_element = tree;
     push(&tree_queue, tree);
+
     do {
-        prev_level = current_tree_element -> level;
+        l = 0;
         show(&tree_queue);
-        current_tree_element = pop(&tree_queue);
-        if (current_tree_element -> level != prev_level)
-            fprintf(output_file, "\n");
-        fprintf(output_file, "%c ", current_tree_element -> elem);
-        if (current_tree_element -> left != NULL) {
-            current_tree_element -> left -> level = current_tree_element -> level + 1;
-            push(&tree_queue, current_tree_element -> left);
+        do {
+            current_tree_element = pop(&tree_queue);
+            fprintf(output_file, "%c ", current_tree_element -> elem);
+            if (current_tree_element -> left != NULL) {
+                push(&tree_queue, current_tree_element->left);
+                l++;
+            }
+
+            if (current_tree_element -> right != NULL) {
+                push(&tree_queue, current_tree_element->right);
+                l++;
+            }
+            k--;
         }
-        if (current_tree_element -> right != NULL) {
-            current_tree_element -> right -> level = current_tree_element -> level + 1;
-            push(&tree_queue, current_tree_element -> right);
-        }
+        while (k != 0);
+        fprintf(output_file, "\n");
+        k = l;
     }
-    while (!is_empty(tree_queue));
+    while (k != 0);
 }
 
 int main(){
     Tree* tree;
     FILE* input_file = fopen("input.txt", "r");
+    if (!input_file){
+        printf("NO FILE!");
+        return 1;
+    }
     tree = build_tree(input_file);
     BFS(tree, "output.txt");
+    return 0;
 }
