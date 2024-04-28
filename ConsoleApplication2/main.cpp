@@ -1,106 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node{
-    node *next = NULL, *prev = NULL;
-    float element = 0;
-};
+const int N = 250;
 
-struct list{
-    node* head = NULL;
-    node* tail = NULL;
-};
-
-
-
-void nodecreate(node* p, float num){
-    node *n = new node;
-    n -> element = num;
-    n -> prev = p;
-    p -> next = n;
-}
-
-
-void input(list* h){
-
-    float element;
-    node* p;
-    FILE* input_file = fopen("input.txt", "r");
-    char c = ' ';
-
-    if (!input_file){
-        printf("РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°");
-        exit(1);
-    }
-    h -> head = new node;
-
-    p = h -> head;
-    fscanf(input_file, "%f", &p -> element);
-
-    while(c != EOF)
-    {
-        fscanf(input_file, "%f", &element);
-        nodecreate(p, element);
-        p = p -> next;
-        c = fgetc(input_file);
-    }
-    h -> tail = p;
-    fclose(input_file);
-
-}
-
-float sequence(node *h, node *p)
+struct info
 {
-    float sum = 0;
-    node *x = h, *y = p;
-    while((x != y) && (x -> prev != y))
+    char code[9];
+    char name[50];
+    int amount;
+};
+
+
+struct table
+{
+    info* el[N];
+};
+
+void check(table* tab)
+{
+    info* elem;
+    printf("\n");
+    for (int i = 0; i < N; i++)
     {
-        sum += 2 * (x -> element) * (y -> element);
-        x = x -> next;
-        y = y -> prev;
+        elem = tab->el[i];
+        if (elem != NULL) printf("%d) %s %s %d\n", i, elem->code, elem->name, elem->amount);
 
     }
-    if (x == y)
-        sum += (x -> element) * (y -> element);
+}
+
+int raise(int q) // возведение в степень, чтобы каждой позиции дать вес, используется основание 2
+// ибо 10 слишком много
+{
+    int num = 1;
+    for (int i = 1; i <= q; i++)
+    {
+        num *= 2;
+    }
+
+    return num;
+}
+
+
+int heshing(char code[9])
+{
+    int i;
+    int sum = 0;
+    for (i = 0; i < 8; i++)
+    {
+        sum += (code[i] - 0) * raise(i);
+    }
+    sum = (sum) % N;
     return sum;
 }
 
-void output(float sum)
+int build_the_table(char* input_file_name)
 {
-    FILE* output_file = fopen("out.txt", "w");
-
-    if(!output_file)
+    table Work_result;
+    for (int i = 0; i < N; i++)
     {
-        printf("РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°");
-        exit(1);
+        Work_result.el[i] = NULL;
     }
 
-    fprintf(output_file, "%.3f", sum);
+    FILE* input_file;
+    info elem;
+    int hash;
 
-    fclose(output_file);
 
-}
+    fopen_s(&input_file, "test.txt", "r");
+    if (!input_file)
+        return 1;
+    while (fscanf_s(input_file, "%s %s %d", elem.code, _countof(elem.code), elem.name, _countof(elem.name), &elem.amount) != EOF)
+    {
+        hash = heshing(elem.code); //значится, захешили
+        printf("%d ", hash);
+        //проверочка на наличие в таблице?
+        if (!Work_result.el[hash]) Work_result.el[hash] = &elem;
 
-void Delete(node *l)
-{
-    node *k = l -> next;
-    for(; k; k = k-> next){
-        delete l;
-        l = k;
+        check(&Work_result);
     }
-    delete l;
 
-}
+    //printf("%s %s %d\n", Work_result.el[113]->code, Work_result.el[113]->name, Work_result.el[113]->amount);
 
-int main(){
-    list *n;
-    node *p, *h;
-    float a;
-    input(n);
-    h = n -> head;
-    p = n -> tail;
-    a = sequence(h, p);
-    output(a);
-    Delete(h);
+    fclose(input_file);
+};
+
+int main() {
+    int c;
+    char input_file_name[] = "test.txt";
+
+    c = build_the_table(input_file_name);
+    if (c) {
+        printf("0");
+        return 0;
+    }
+
     return 0;
 }
