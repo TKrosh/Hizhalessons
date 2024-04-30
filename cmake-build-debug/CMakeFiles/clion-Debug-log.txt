@@ -1,1 +1,1 @@
-CMakeLists.txt not found in /Users/nikul22/CLionProjects/pz_2 Select CMakeLists.txt
+CMakeLists.txt not found in /Users/nikul22/CLionProjects/Hizhalessons Select CMakeLists.txt
