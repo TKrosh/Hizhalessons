@@ -4,6 +4,4 @@ project(Hizhalessons)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(Hizhalessons
-        ../main.cpp
-        ../Structs.cpp
-        ../Tree_queue.cpp)
+        ../main.cpp)

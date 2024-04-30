@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Applications/CLion.app/Contents/bin/cmake/mac/x64/bin/cmake --regenerate-during-build -S/Users/nikul22/CLionProjects/Hizhalessons -B/Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug
+  command = /Applications/CLion.app/Contents/bin/cmake/mac/x64/bin/cmake --regenerate-during-build -S/Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug -B/Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug
   description = Re-running CMake...
   generator = 1
 

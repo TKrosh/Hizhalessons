@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Hizhalessons::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Hizhalessons-Debug-6d824cf35de50d3c08b7.json",
+					"jsonFile" : "target-Hizhalessons-Debug-2456fb2afd52945826ee.json",
 					"name" : "Hizhalessons",
 					"projectIndex" : 0
 				}
@@ -50,7 +50,7 @@
 	"paths" : 
 	{
 		"build" : "/Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug",
-		"source" : "/Users/nikul22/CLionProjects/Hizhalessons"
+		"source" : "/Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug"
 	},
 	"version" : 
 	{

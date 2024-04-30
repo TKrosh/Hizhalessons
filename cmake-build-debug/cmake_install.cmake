@@ -1,4 +1,4 @@
-# Install script for directory: /Users/nikul22/CLionProjects/Hizhalessons
+# Install script for directory: /Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
