@@ -29,9 +29,12 @@ void check(table* tab)
     }
 }
 
-void rehash(table* tab, int* hash){
-    while(tab->el[*hash]) *hash = (*hash + 1) % N;
-
+int rehash(table* tab, int hash){
+    int new_hash = (hash + 1) % N;
+    while(tab->el[new_hash] && strcmp(tab->el[hash]->code, tab->el[new_hash]->code)){
+        new_hash = (new_hash + 1) % N;
+    }
+    return new_hash;
 }
 
 
@@ -64,7 +67,7 @@ int build_the_table(char* input_file_name, table* Work_result)
     while (fscanf(input_file, "%s %s %d", elem.code, elem.name, &elem.amount) != EOF)
     {
         hash = heshing(elem.code); //значится, захешили
-//        printf("%d %s %s ", hash, elem.code, elem.name);
+        printf("%d %s %s ", hash, elem.code, elem.name);
         if (!Work_result->el[hash]){
             Work_result->el[hash] = new info;
             *Work_result->el[hash] = elem;
@@ -72,13 +75,14 @@ int build_the_table(char* input_file_name, table* Work_result)
         else if (!strcmp(Work_result->el[hash]->code, elem.code))
             Work_result->el[hash]->amount += elem.amount;
         else {
-            rehash(Work_result, &hash);
-            Work_result->el[hash] = new info;
-            *Work_result->el[hash] = elem;
+            hash = rehash(Work_result, hash);
+            if (!Work_result->el[hash]){
+                Work_result->el[hash] = new info;
+                *Work_result->el[hash] = elem;
+            }
+            else Work_result->el[hash]->amount += elem.amount;
         }
-
-
-
+//        check(Work_result);
     }
 
     fclose(input_file);
