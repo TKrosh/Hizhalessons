@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int N = 250;
+const int N = 256;
 
 struct info
 {
