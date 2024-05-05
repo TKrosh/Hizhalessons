@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/nikul22/CLionProjects/Hizhalessons1/cmake-build-debug",
-		"source" : "/Users/nikul22/CLionProjects/Hizhalessons1"
+		"build" : "/Users/nikul22/CLionProjects/Hizhalessons/cmake-build-debug",
+		"source" : "/Users/nikul22/CLionProjects/Hizhalessons"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 5
+		"minor" : 6
 	}
 }

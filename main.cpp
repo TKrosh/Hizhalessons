@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "stdio.h"
+#include "string.h"
 
-const int N = 4;
+const int N = 256;
 
 struct info
 {
@@ -66,9 +65,8 @@ int rehash(int hash, table* t, info* elem)
 }
 
 void output(char* output_file_name, table* result) {
-    FILE* output_file;
+    FILE* output_file = fopen(output_file_name, "w");;
     info* elem;
-    fopen_s(&output_file, output_file_name, "w");
     for (int i = 0; i < N; i++)
     {
         elem = result->el[i];
@@ -80,25 +78,21 @@ void output(char* output_file_name, table* result) {
 
 int build_the_table(char* input_file_name, table* Work_result)
 {
-    FILE* input_file;
+    FILE* input_file = fopen(input_file_name, "r");;
     info elem;
     int hash, new_hash, res = 1;
 
-    for (int i = 0; i < N; i++)
-    {
-        Work_result->el[i] = NULL;
-    }
-
-
-    fopen_s(&input_file, input_file_name, "r");
     if (!input_file)
         return 0;
 
+    for(int i = 0; i < N; i++)
+        Work_result->el[i] = NULL;
 
-    while (fscanf_s(input_file, "%s %s %d", elem.code, _countof(elem.code), elem.name, _countof(elem.name), &elem.amount) != EOF)
+
+    while (fscanf(input_file, "%s %s %d", elem.code, elem.name, &elem.amount) != EOF)
     {
         hash = heshing(elem.code);
-        printf("%d\n", hash);
+//        printf("%d\n", hash);
         if (!Work_result->el[hash])
         {
             Work_result->el[hash] = new info;
@@ -118,7 +112,7 @@ int build_the_table(char* input_file_name, table* Work_result)
                 new_hash = rehash(hash, Work_result, &elem);
                 if (hash == new_hash)
                 {
-                    res = 0;// if there is "return" we won't work with ements 
+                    res = 0;// if there is "return" we won't work with ements
                     //that is in the table, but goes after elem that does not have palce
                     //in the table
                 }
@@ -139,33 +133,25 @@ int build_the_table(char* input_file_name, table* Work_result)
     }
 
     fclose(input_file);
-    if (res)
-    {
-        return 1;
-    }
-    else
-    {
-        return -1;
-    }
+    return res ? 1: -1;
+
 
 };
 
 int main() {
     int c;
-    char input_file_name[] = "test.txt";
-    char output_file_name[] = "result.txt";
     table Work_result;
 
-    c = build_the_table(input_file_name, &Work_result);
+    c = build_the_table("test.txt", &Work_result);
     if (!c)
     {
         printf("0");
         return 0;
     }
-    output(output_file_name, &Work_result);
+    output("result.txt", &Work_result);
     if (c == -1)
     {
-        printf("-1");//too mush elements, no place in table!!!
+        printf("-1"); //too mush elements, no place in table!!!
         return 0;
     }
 
