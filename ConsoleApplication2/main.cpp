@@ -1,173 +1,158 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-const int N = 4;
-
-struct info
+struct word
 {
-    char code[9];
-    char name[50];
-    int amount;
+    word* next = NULL;
+    char letter;
 };
 
-
-struct table
+struct dict
 {
-    info* el[N];
+    dict* next = NULL;
+    word* first_letter;
+};
+
+struct list
+{
+    list* next = NULL;
     int n = 0;
 };
 
-void check(table* tab)
-{
-    info* elem;
-    printf("\n");
-    for (int i = 0; i < N; i++)
-    {
-        elem = tab->el[i];
-        if (elem != NULL) printf("%d) %s %s %d\n", i, elem->code, elem->name, elem->amount);
-
-    }
-}
-
-int raise(int q)
-{
-    int num = 1;
-    for (int i = 1; i <= q; i++)
-    {
-        num *= 2;
-    }
-
-    return num;
-}
-
-
-int heshing(char code[9], int col = 0)
-{
-    int i;
-    int sum = 0;
-    for (i = 0; i < 8; i++)
-    {
-        sum += (code[i] - 0) * raise(i);
-    }
-    sum = (sum + col) % N;
-    return sum;
-}
-
-int rehash(int hash, table* t, info* elem)
-{
-    int new_hash; //that is a new hash
-    new_hash = (hash + 1) % N;
-    while (t->el[new_hash] && hash != new_hash && strcmp(t->el[new_hash]->code, elem->code))
-    {
-        new_hash = (new_hash + 1) % N;
-    }
-    return new_hash;
-}
-
-void output(char* output_file_name, table* result) {
-    FILE* output_file;
-    info* elem;
-    fopen_s(&output_file, output_file_name, "w");
-    for (int i = 0; i < N; i++)
-    {
-        elem = result->el[i];
-        if (result->el[i]) fprintf(output_file, "%d %s %s %d\n", i, elem->code, elem->name, elem->amount);
-
-    }
-    fclose(output_file);
-}
-
-int build_the_table(char* input_file_name, table* Work_result)
+int input(char* file_name, dict** book_start)
 {
     FILE* input_file;
-    info elem;
-    int hash, new_hash, res = 1;
+    word* slovo;
+    dict* book;
+    book = *book_start;
+    char c;
 
-    for (int i = 0; i < N; i++)
-    {
-        Work_result->el[i] = NULL;
-    }
-
-
-    fopen_s(&input_file, input_file_name, "r");
+    fopen_s(&input_file, file_name, "r");
     if (!input_file)
         return 0;
-
-
-    while (fscanf_s(input_file, "%s %s %d", elem.code, _countof(elem.code), elem.name, _countof(elem.name), &elem.amount) != EOF)
+    c = fgetc(input_file);
+    slovo = new word;
+    slovo->letter = c;
+    book->first_letter = slovo;
+    c = fgetc(input_file);
+    while (c != '.')
     {
-        hash = heshing(elem.code);
-        printf("%d\n", hash);
-        if (!Work_result->el[hash])
+        if (c == ',')
         {
-            Work_result->el[hash] = new info;
-            *Work_result->el[hash] = elem;
-            Work_result->n = Work_result->n + 1;
+            slovo->next = NULL;
+            book->next = new dict;
+            book = book->next;
+            c = fgetc(input_file);
+            slovo = new word;
+            slovo->letter = c;
+            book->first_letter = slovo;
         }
         else
         {
-
-            if (!strcmp(Work_result->el[hash]->code, elem.code))
-            {
-                Work_result->el[hash]->amount += elem.amount;
-            }
-            else
-            {
-                
-                new_hash = rehash(hash, Work_result, &elem);
-                if (hash == new_hash)
-                {
-                    res = 0;// if there is "return" we won't work with ements 
-                    //that is in the table, but goes after elem that does not have palce
-                    //in the table
-                }
-                if (!Work_result->el[new_hash])
-                {
-                    Work_result->el[new_hash] = new info;
-                    *Work_result->el[new_hash] = elem;
-                    Work_result->n = Work_result->n + 1;
-                }
-                else
-                {
-                    Work_result->el[new_hash]->amount += elem.amount;
-                }
-            }
+            slovo->next = new word;
+            slovo = slovo->next;
+            slovo->letter = c;
         }
-
-        //check(Work_result);
+        c = fgetc(input_file);
     }
-
     fclose(input_file);
-    if (res)
+    return 1;
+}
+
+int check_len(dict** book_start, list* lens)
+{
+    int count, max = -1;
+    word* slovo;
+    dict* book;
+    list* len_words;
+    len_words = lens;
+    book = *book_start;
+
+    while (book->next != NULL)
     {
-        return 1;
+        count = 0;
+        slovo = book->first_letter;
+        while (slovo->next != NULL)
+        {
+            count++;
+            slovo = slovo->next;
+        }
+        book = book->next;
+        if (count > max) max = count;
+        len_words->n = count;
+        len_words->next = new list;
+        len_words = len_words->next;
     }
-    else
+    count = 0;
+    slovo = book->first_letter;
+    while (slovo->next != NULL)
     {
-        return -1;
+        count++;
+        slovo = slovo->next;
+    }
+    len_words->n = count;
+    if (count > max) max = count;
+    return max;
+}
+
+void save(dict** book_start, list* lens, int max)
+{
+    dict* book;
+    book = *book_start;
+    list* len_words;
+    len_words = lens;
+    word* slovo;
+
+    FILE* output_file;
+    fopen_s(&output_file, "result.txt", "w");
+
+    while (book->next != NULL)
+    {
+        if (len_words->n == max)
+        {
+            slovo = book->first_letter;
+            while (slovo->next != NULL)
+            {
+                fprintf(output_file, "%c", slovo->letter);
+                slovo = slovo->next;
+            }
+            fprintf(output_file, "%c", slovo->letter);
+            fprintf(output_file, "\n");
+        }
+        len_words = len_words->next;
+        book = book->next;
+
+    }
+    if (len_words->n == max)
+    {
+        slovo = book->first_letter;
+        while (slovo->next != NULL)
+        {
+            fprintf(output_file, "%c", slovo->letter);
+            slovo = slovo->next;
+        }
+        fprintf(output_file, "%c", slovo->letter);
     }
 
-};
+
+    fclose(output_file);
+}
 
 int main() {
-    int c;
-    char input_file_name[] = "test.txt";
-    char output_file_name[] = "result.txt";
-    table Work_result;
+    int c, max;
+    char input_file_name[] = "words.txt";
+    dict* book_start;
+    list* len_words;
+    len_words = new list;
+    book_start = new dict;
 
-    c = build_the_table(input_file_name, &Work_result);
+    c = input(input_file_name, &book_start);
     if (!c)
     {
         printf("0");
         return 0;
     }
-    output(output_file_name, &Work_result);
-    if (c == -1)
-    {
-        printf("-1");//too mush elements, no place in table!!!
-        return 0;
-    }
-
+    max = check_len(&book_start, len_words);
+    save(&book_start, len_words, max);
     return 0;
 }
