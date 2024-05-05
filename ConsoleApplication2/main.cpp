@@ -15,6 +15,7 @@ struct info
 struct table
 {
     info* el[N];
+    int n = 0;
 };
 
 void check(table* tab)
@@ -29,8 +30,7 @@ void check(table* tab)
     }
 }
 
-int raise(int q) // возведение в степень, чтобы каждой позиции дать вес, используется основание 2
-// ибо 10 слишком много
+int raise(int q)
 {
     int num = 1;
     for (int i = 1; i <= q; i++)
@@ -56,7 +56,7 @@ int heshing(char code[9], int col = 0)
 
 int rehash(int hash, table* t, info* elem)
 {
-    int new_hash; //переменная для нового хеша
+    int new_hash; //that is a new hash
     new_hash = (hash + 1) % N;
     while (t->el[new_hash] && hash != new_hash && strcmp(t->el[new_hash]->code, elem->code))
     {
@@ -65,11 +65,24 @@ int rehash(int hash, table* t, info* elem)
     return new_hash;
 }
 
+void output(char* output_file_name, table* result) {
+    FILE* output_file;
+    info* elem;
+    fopen_s(&output_file, output_file_name, "w");
+    for (int i = 0; i < N; i++)
+    {
+        elem = result->el[i];
+        if (result->el[i]) fprintf(output_file, "%d %s %s %d\n", i, elem->code, elem->name, elem->amount);
+
+    }
+    fclose(output_file);
+}
+
 int build_the_table(char* input_file_name, table* Work_result)
 {
     FILE* input_file;
     info elem;
-    int hash;
+    int hash, new_hash, res = 1;
 
     for (int i = 0; i < N; i++)
     {
@@ -79,55 +92,78 @@ int build_the_table(char* input_file_name, table* Work_result)
 
     fopen_s(&input_file, input_file_name, "r");
     if (!input_file)
-        return 1;
+        return 0;
 
 
     while (fscanf_s(input_file, "%s %s %d", elem.code, _countof(elem.code), elem.name, _countof(elem.name), &elem.amount) != EOF)
     {
-        hash = heshing(elem.code); //значится, захешили
-        printf("%d ", hash);
-        //проверочка на наличие в таблице?
+        hash = heshing(elem.code);
         if (!Work_result->el[hash])
-        {//если с списках не значиться, то добавить
+        {
             Work_result->el[hash] = new info;
             *Work_result->el[hash] = elem;
+            Work_result->n = Work_result->n + 1;
         }
-        else//теперь проверяем произощло ли совпадение хешей или это тот же товар
+        else
         {
 
-            if (!strcmp(Work_result->el[hash]->code, elem.code))//если этот товар уже есть то увеличиваем кол-во
+            if (!strcmp(Work_result->el[hash]->code, elem.code))
             {
                 Work_result->el[hash]->amount += elem.amount;
             }
             else
             {
-                hash = rehash(hash, Work_result, &elem);
-                if (!Work_result->el[hash])//если этот товар уже есть то увеличиваем кол-во
+                if (Work_result->n == N)
                 {
-                    Work_result->el[hash] = new info;
-                    *Work_result->el[hash] = elem;
+                    res = 0;// if there is "return" we won't work with ements 
+                    //that is in the table, but goes after elem that does not have palce
+                    //in the table
+                }
+                new_hash = rehash(hash, Work_result, &elem);
+                if (!Work_result->el[new_hash])
+                {
+                    Work_result->el[new_hash] = new info;
+                    *Work_result->el[new_hash] = elem;
+                    Work_result->n = Work_result->n + 1;
                 }
                 else
                 {
-                    Work_result->el[hash]->amount += elem.amount;
+                    Work_result->el[new_hash]->amount += elem.amount;
                 }
             }
         }
 
-        check(Work_result);
+        //check(Work_result);
     }
 
     fclose(input_file);
+    if (res)
+    {
+        return 1;
+    }
+    else
+    {
+        return -1;
+    }
+
 };
 
 int main() {
     int c;
     char input_file_name[] = "test.txt";
+    char output_file_name[] = "result.txt";
     table Work_result;
 
     c = build_the_table(input_file_name, &Work_result);
-    if (c) {
+    if (!c)
+    {
         printf("0");
+        return 0;
+    }
+    output(output_file_name, &Work_result);
+    if (c == -1)
+    {
+        printf("-1");//too mush elements, no place in table!!!
         return 0;
     }
 
