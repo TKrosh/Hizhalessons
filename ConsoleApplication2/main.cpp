@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int N = 256;
+const int N = 4;
 
 struct info
 {
@@ -98,6 +98,7 @@ int build_the_table(char* input_file_name, table* Work_result)
     while (fscanf_s(input_file, "%s %s %d", elem.code, _countof(elem.code), elem.name, _countof(elem.name), &elem.amount) != EOF)
     {
         hash = heshing(elem.code);
+        printf("%d\n", hash);
         if (!Work_result->el[hash])
         {
             Work_result->el[hash] = new info;
@@ -113,13 +114,14 @@ int build_the_table(char* input_file_name, table* Work_result)
             }
             else
             {
-                if (Work_result->n == N)
+                
+                new_hash = rehash(hash, Work_result, &elem);
+                if (hash == new_hash)
                 {
                     res = 0;// if there is "return" we won't work with ements 
                     //that is in the table, but goes after elem that does not have palce
                     //in the table
                 }
-                new_hash = rehash(hash, Work_result, &elem);
                 if (!Work_result->el[new_hash])
                 {
                     Work_result->el[new_hash] = new info;
