@@ -1,0 +1,5 @@
+ABCDEFGH tank 12
+KCJHPDLZ car 23
+PODICNFS plane 13
+HFYGHGHG weel 23
+BCHDBGZX keyboard 99
