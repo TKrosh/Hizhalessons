@@ -11,7 +11,7 @@ struct info
     char code[9];
     char name[50];
     int amount;
-    int price;
+    float price;
 };
 
 
@@ -38,14 +38,17 @@ int appending_table(table* work_result, char* test_name, char* prices) {
 
         strcpy(good_price.code, "");
 
-        while(fscanf(price_file, "%s %d", good_price.code, &good_price.price) != EOF && strcmp(element_of_table.code, good_price.code) <= 0){
+        while(fscanf(price_file, "%s %f", good_price.code, &good_price.price) != EOF && strcmp(element_of_table.code, good_price.code) >= 0){
             if (!strcmp(element_of_table.code, good_price.code)){
                 work_result->el[i] = element_of_table;
                 work_result->el[i++].price = good_price.price;
             }
         }
     }
-
+    for(int j = 0; j < i; j++){
+        info x = work_result->el[j];
+        printf("%d %s %s %d %f\n", x.hash_code, x.code, x.name, x.amount, x.price);
+    }
     fclose(input_file);
     fclose(price_file);
     return 0;
@@ -61,6 +64,7 @@ int main(){
     char prices[] = "price_list.txt";
     task_completed = appending_table(&result, test_name, prices);
     if (task_completed){
+        printf("sadfgbfdsdsfghgdchn");
         return 1;
     }
 
