@@ -18,10 +18,17 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="binsort.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test.txt" />
-    <Text Include="result.txt" />
-    <Text Include="words.txt" />
+    <ClInclude Include="includes.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test1.txt" />
+    <Text Include="price_list.txt" />
   </ItemGroup>
 </Project>

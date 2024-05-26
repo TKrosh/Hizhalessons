@@ -1,59 +1,76 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include "includes.hpp"
 
 
-void check(int* n)
-{
-	for (int i = 0; i < 8; i++)
-	{
-		printf("%d ", n[i]);
-	}
-	printf("\n");
+
+int appending_table(table* work_result, char* test_name, char* prices) {
+    FILE* input_file;
+    FILE* price_file;
+
+    fopen_s(&price_file, prices, "r");
+    fopen_s(&input_file, test_name, "r");
+    info element_of_table, good_price;
+    int i = 0;
+    if (!input_file)
+        return 1;
+
+    for (int i = 0; i < N; i++)
+    {
+        strcpy_s(work_result->el[i].code, "");
+    }
+
+
+    while (fscanf_s(input_file, "%d %s %s %d", &element_of_table.hash_code, element_of_table.code, _countof(element_of_table.code), element_of_table.name, _countof(element_of_table.code), &element_of_table.amount) != EOF)
+    {
+
+        if (!price_file)
+            return 1;
+
+
+        while (fscanf_s(price_file, "%s %f", good_price.code, _countof(good_price.code), &good_price.price) != EOF && strcmp(element_of_table.code, good_price.code) >= 0) {
+            if (!strcmp(element_of_table.code, good_price.code)) {
+                work_result->el[i] = element_of_table;
+                work_result->el[i++].price = good_price.price;
+            }
+        }
+        fseek(price_file, 0, SEEK_SET);
+    }
+
+    fclose(input_file);
+    fclose(price_file);
+    return 0;
 }
 
-void binsort(int* n, int start, int end)
-{
-	int t, lt, rt, max, x;
-	max = start;
-	do
-	{
-		t = max;
-		lt = 2 * t + 1;
-		rt = 2 * (t + 1);
-		if (lt <= end)
-			if (n[lt] > n[t])
-				max = lt;
-		if (rt <= end)
-			if (n[rt] > n[max])
-				max = rt;
-		x = n[t];
-		n[t] = n[max];
-		n[max] = x;
-	} while (t != max);
+
+void output(char* output_file_name, table* result) {
+    FILE* output_file;
+    info elem;
+    fopen_s(&output_file, output_file_name, "w");
+    for (int i = 0; i < N; i++)
+    {
+        elem = result->el[i];
+        if (strcmp(elem.code, ""))
+            fprintf(output_file, "%d %d %s %s %d\n", i, elem.hash_code, elem.code, elem.name, elem.amount);
+    }
+    fclose(output_file);
 }
 
-void biuld_tree(int* nums)
-{
-	int x;
-	for (int i = (8 - 1) / 2; i >= 0; i--)
-	{
-		binsort(nums, i, 8 - 1);
-		check(nums);
-	}
-	printf("\n");
-	for (int i = (8 - 1); i > 0; i--)
-	{
-		x = nums[0];
-		nums[0] = nums[i];
-		nums[i] = x;
-		binsort(nums, 0, i - 1);
-		check(nums);
-	}
-}
 
 int main() {
-	int nums[8] = { 58, 6, 46, 4, 45, 455, 19, 7 };
-	biuld_tree(nums);
-	check(nums);
-	return 0;
+    table result;
+    int task_completed;
+    char test_name[] = "test1.txt";
+    char prices[] = "price_list.txt";
+    char output_file[] = "output.txt";
+    task_completed = appending_table(&result, test_name, prices);
+    if (task_completed) {
+        printf("0");
+        return 1;
+    }
+
+    biuld_tree(&result);
+    check_table(&result);
+    output(output_file, &result);
 }

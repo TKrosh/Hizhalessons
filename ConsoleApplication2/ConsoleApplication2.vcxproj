@@ -127,12 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="binsort.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="result.txt" />
-    <Text Include="test.txt" />
-    <Text Include="words.txt" />
+    <ClInclude Include="includes.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="price_list.txt" />
+    <Text Include="test1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
