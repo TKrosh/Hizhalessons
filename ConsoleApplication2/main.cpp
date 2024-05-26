@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 
+
+void check(int* n)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		printf("%d ", n[i]);
+	}
+	printf("\n");
+}
+
 void binsort(int* n, int start, int end)
 {
 	int t, lt, rt, max, x;
@@ -22,20 +32,9 @@ void binsort(int* n, int start, int end)
 	} while (t != max);
 }
 
-void check(int* n)
+void biuld_tree(int* nums)
 {
-	for (int i = 0; i < 8; i++)
-	{
-		printf("%d ", n[i]);
-	}
-	printf("\n");
-}
-
-int main() {
 	int x;
-	int nums[8] = { 58, 6, 46, 4, 45, 455, 19, 7 };
-	int copy_nums[8] = { 58, 6, 46, 4, 45, 455, 19, 7 };
-
 	for (int i = (8 - 1) / 2; i >= 0; i--)
 	{
 		binsort(nums, i, 8 - 1);
@@ -50,9 +49,11 @@ int main() {
 		binsort(nums, 0, i - 1);
 		check(nums);
 	}
-	printf("The input: ");
-	check(copy_nums);
-	printf("The output: ");
+}
+
+int main() {
+	int nums[8] = { 58, 6, 46, 4, 45, 455, 19, 7 };
+	biuld_tree(nums);
 	check(nums);
 	return 0;
 }
