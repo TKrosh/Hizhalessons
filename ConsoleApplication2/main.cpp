@@ -1,76 +1,76 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include "includes.hpp"
 
+struct runner
+{
+	int num = 0;
+	float time = 0;
+};
 
+struct table
+{
+	runner el[3];
+};
 
-int appending_table(table* work_result, char* test_name, char* prices) {
-    FILE* input_file;
-    FILE* price_file;
+int find_win(char* file_name, table* winners)
+{
+	FILE* input_file;
+	fopen_s(&input_file, file_name, "r");
 
-    fopen_s(&price_file, prices, "r");
-    fopen_s(&input_file, test_name, "r");
-    info element_of_table, good_price;
-    int i = 0;
-    if (!input_file)
-        return 1;
+	if (!input_file)
+	{
+		return 0;
+	}
 
-    for (int i = 0; i < N; i++)
-    {
-        strcpy_s(work_result->el[i].code, "");
-    }
+	int number;
+	float start, finish, time;
 
-
-    while (fscanf_s(input_file, "%d %s %s %d", &element_of_table.hash_code, element_of_table.code, _countof(element_of_table.code), element_of_table.name, _countof(element_of_table.code), &element_of_table.amount) != EOF)
-    {
-
-        if (!price_file)
-            return 1;
-
-
-        while (fscanf_s(price_file, "%s %f", good_price.code, _countof(good_price.code), &good_price.price) != EOF && strcmp(element_of_table.code, good_price.code) >= 0) {
-            if (!strcmp(element_of_table.code, good_price.code)) {
-                work_result->el[i] = element_of_table;
-                work_result->el[i++].price = good_price.price;
-            }
-        }
-        fseek(price_file, 0, SEEK_SET);
-    }
-
-    fclose(input_file);
-    fclose(price_file);
-    return 0;
+	while (fscanf_s(input_file, "%d %f %f", &number, &start, &finish) != EOF)
+	{
+		time = finish - start;
+		if ((time <= winners->el[0].time) || (winners->el[0].time == 0))
+		{
+			winners->el[2] = winners->el[1];
+			winners->el[1] = winners->el[0];
+			winners->el[0].num = number;
+			winners->el[0].time = time;
+		}
+		else if ((time <= winners->el[1].time) || (winners->el[1].time == 0))
+		{
+			winners->el[2] = winners->el[1];
+			winners->el[1].num = number;
+			winners->el[1].time = time;
+		}
+		else if ((time <= winners->el[2].time) || (winners->el[2].time == 0))
+		{
+			winners->el[2].num = number;
+			winners->el[2].time = time;
+		}
+	}
+	return 1;
 }
 
+void save(char* file_name, table* winners)
+{
+	FILE* output_file;
+	fopen_s(&output_file, file_name, "w");
+	if (winners->el[2].num == 0) fprintf(output_file, "\n");
+	else for (int i = 0; i < 3; i++) fprintf(output_file, "%d %f\n", winners->el[i].num, winners->el[i].time);
 
-void output(char* output_file_name, table* result) {
-    FILE* output_file;
-    info elem;
-    fopen_s(&output_file, output_file_name, "w");
-    for (int i = 0; i < N; i++)
-    {
-        elem = result->el[i];
-        if (strcmp(elem.code, ""))
-            fprintf(output_file, "%d %d %s %s %d\n", i, elem.hash_code, elem.code, elem.name, elem.amount);
-    }
-    fclose(output_file);
 }
 
-
-int main() {
-    table result;
-    int task_completed;
-    char test_name[] = "test1.txt";
-    char prices[] = "price_list.txt";
-    char output_file[] = "output.txt";
-    task_completed = appending_table(&result, test_name, prices);
-    if (task_completed) {
-        printf("0");
-        return 1;
-    }
-
-    biuld_tree(&result);
-    check_table(&result);
-    output(output_file, &result);
+int main()
+{
+	table winners;
+	char input_file_name[] = "input.txt";
+	char output_file_name[] = "result.txt";
+	int c;
+	c = find_win(input_file_name, &winners);
+	if (!c)
+	{
+		printf("0");
+		return 0;
+	}
+	save(output_file_name, &winners);
+	return 0;
 }
